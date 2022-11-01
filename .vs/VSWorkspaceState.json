@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\flask",
+    "\\vue",
+    "\\vue\\frontvue",
+    "\\vue\\frontvue\\public",
+    "\\vue\\frontvue\\src",
+    "\\vue\\frontvue\\src\\assets",
+    "\\vue\\frontvue\\src\\components",
+    "\\vue\\frontvue\\src\\router"
+  ],
+  "SelectedNode": "\\vue\\frontvue\\src\\router\\index.js",
+  "PreviewInSolutionExplorer": false
+}
