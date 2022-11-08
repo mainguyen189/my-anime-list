@@ -20,18 +20,21 @@
             <thead>
                 <tr>
                     <th scope="col">Title</th>
-                    <th scope="col">Aired date</th>
-                    <th scope="col">Watch status</th>
+                    <th scope="col">Tags</th>
+                    <th scope="col">Watched?</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td></td>
                     <td>
-                        <div class="btn-group" role="group"></div>
+                        <div class="btn-group" role="group">
+                          <button type="button" class="btn btn-info btn-sm">Update</button>
+                          <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                        </div>
 
                     </td>
-                </tr><th scope="col">Title</th>
+                </tr>
             </tbody>
           </table>
         </div>
@@ -39,3 +42,31 @@
     </div>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+export default {
+  data(){
+    return {
+      anime:[]
+    };
+  },
+
+  methods:{
+    getAnime(){
+      const path = "http://localhost:5000/anime";
+      axios.get(path)
+      .then((response)=>{
+        this.anime = response.data.anime;
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+    },
+  },
+  created() {
+    this.getAnime();
+    
+  }
+}
+</script>
