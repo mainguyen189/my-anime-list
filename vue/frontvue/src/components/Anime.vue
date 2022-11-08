@@ -25,8 +25,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
+                <tr v-for="ani, index in anime" :key="index">
+                    <td>{{ani.title}}</td>
+                    <td>{{ani.tags}}</td>
+                    <td>
+                      <span v-if="ani.finished">Yes</span>
+                      <span v-else>No</span>
+                    </td>
                     <td>
                         <div class="btn-group" role="group">
                           <button type="button" class="btn btn-info btn-sm">Update</button>
@@ -66,7 +71,7 @@ export default {
   },
   created() {
     this.getAnime();
-    
+
   }
 }
 </script>
