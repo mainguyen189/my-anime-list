@@ -15,6 +15,14 @@ def hello():
 def miaow():
     return "You found cat not anime"
 
+ANIME = [{'title':'Fairy Tail', 'tags': {'shounen','comedy'}, 'finished': True}]
+
+@app.route('/anime', methods=["GET"])
+def anime():
+    return jsonify({
+        'anime': ANIME,
+        'status': 'success'
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
