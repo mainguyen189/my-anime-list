@@ -9,7 +9,7 @@
       />
       <div class="row">
         <div class="col-sm-12">
-          <p>My anime list</p>
+          <h1 class="text-center" style="border-radius:12px">My anime list</h1>
           <hr><br>
 
           <button type="button" class="btn btn-success">Add anime</button>
@@ -42,8 +42,34 @@
                 </tr>
             </tbody>
           </table>
+          <footer class="bg-primary text-white text-center"> Copyright &copy; Mai reserved 2022</footer>
         </div>
       </div>
+
+      <!--first modal-->
+      <b-modal ref="addAnimeModal" id="anime-modal" title="Add new anime" hide-backdrop hide-footer>
+        <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+          <b-form-group id="form-title-group" label="Title:" label-for="form-title-input">
+            <b-form-input id="form-title-input" type="text" v-model="addAnimeForm.title" required placeholder="Enter Anime">
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group id="form-tags-group" label="Tags:" label-for="form-tags-input">
+            <b-form-input id="form-tags-input" type="text" v-model="addAnimeForm.tags" required placeholder="Enter Tags">
+            </b-form-input>
+          </b-form-group>
+
+        <b-form-group id="form-finished-group">
+          <b-form-checkbox-group id="form-check" v-model="addAnimeform.finished">
+            <b-form-checkbox value="true">Finished?</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+
+        <!--buttons-->
+        <button type="submit" variant="primary">Submit</button>
+        <button type="reset" variant="primary">Reset</button>
+        </b-form>
+      </b-modal>
     </div>
   </div>
 </template>
