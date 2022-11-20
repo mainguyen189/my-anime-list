@@ -12,6 +12,9 @@
           <h1 class="text-center" style="border-radius:12px">My anime list</h1>
           <hr><br>
 
+          <!--alert mess-->
+          <b-alert variant="success" v-if="showMessage" show>{{message}}</b-alert>
+
           <button type="button" class="btn btn-success" v-b-modal.anime-modal>Add anime</button>
 
           <br><br>
@@ -88,6 +91,8 @@ export default {
     };
   },
 
+  message:"",
+
   methods:{
     getAnime(){
       const path = "http://localhost:5000/anime";
@@ -105,6 +110,8 @@ export default {
       axios.get(path, payLoad)
       .then((response)=>{
         this.getAnime();
+        this.message = "Anime added";
+        this.showMessage = true;
       })
       .catch((error) =>{
         console.error(error);
