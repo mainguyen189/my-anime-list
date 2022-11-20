@@ -12,7 +12,7 @@
           <h1 class="text-center" style="border-radius:12px">My anime list</h1>
           <hr><br>
 
-          <button type="button" class="btn btn-success">Add anime</button>
+          <button type="button" class="btn btn-success" v-b-modal.anime-modal>Add anime</button>
 
           <br><br>
 
@@ -66,8 +66,8 @@
         </b-form-group>
 
         <!--buttons-->
-        <button type="submit" variant="primary">Submit</button>
-        <button type="reset" variant="primary">Reset</button>
+        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button type="reset" variant="primary">Reset</b-button>
         </b-form>
       </b-modal>
     </div>
@@ -79,7 +79,12 @@ import axios from 'axios';
 export default {
   data(){
     return {
-      anime:[]
+      anime:[],
+      addAnimeForm: {
+        title: "",
+        tags:[],
+        finished: [],
+      },
     };
   },
 
@@ -94,6 +99,47 @@ export default {
         console.error(error);
       });
     },
+
+    addAnime(payLoad){
+      const path = "http://localhost:5000/anime";
+      axios.get(path, payLoad)
+      .then((response)=>{
+        this.getAnime();
+      })
+      .catch((error) =>{
+        console.error(error);
+        this.getAnime();
+      });
+    },
+    //initialize empty form
+    initForm(){
+      this.addAnimeForm.title = "";
+      this.addAnimeForm.tags = [];
+      this.addAnimeForm.finished = [];
+    },
+
+    //submit function
+    onSubmit(e) {
+      e.preventDefault();
+      this.$refs.addAnimeModal.hide();
+      let finished = false;
+      if (this.addAnimeForm.finished[0]) finished = true;
+      const payload = {
+        title: this.addAnimeForm.title,
+        tags: this.addAnimeForm.tags,
+        finished: this.addAnimeForm.finished
+      };
+      this.addAnime(payload);
+      this.initForm();
+    },
+
+    onReset(e) {
+      e.preventDefault();
+      this.$refs.addAnimeModal.hide();
+      this.initForm();
+    }
+
+
   },
   created() {
     this.getAnime();
