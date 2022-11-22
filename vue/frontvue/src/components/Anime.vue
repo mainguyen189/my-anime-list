@@ -38,7 +38,7 @@
                     <td>
                         <div class="btn-group" role="group">
                           <button type="button" class="btn btn-info btn-sm" v-b-modal.anime-update-modal @click="updateAni(ani)">Update</button>
-                          <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                          <button type="button" class="btn btn-danger btn-sm" @click="deleteAni(ani)">Delete</button>
                         </div>
 
                     </td>
@@ -227,6 +227,24 @@ export default {
     updateAni(ani) {
       this.updateAnimeForm = ani;
     },
+
+    deleteAnime(animeId) {
+      const path = `http://localhost:5000/anime/${animeId}`;
+      axios.delete(path)
+      .then(() => {
+        this.getAnime();
+        this.message = "Anime deleted";
+        this.showMessage = true;
+      })
+      .catch((error) =>{
+        console.error(error);
+        this.getAnime();
+      });
+    },
+
+    deleteAni(ani) {
+      this.deleteAnime(ani.id);
+    }
 
 
   },

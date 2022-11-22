@@ -19,12 +19,13 @@ def miaow():
     return "You found cat not anime"
 
 
-ANIME = [{'title': 'Fairy Tail', 'tags': [
-    'shounen', 'comedy'], 'finished': True}]
+ANIME = [{
+    'id': uuid.uuid4().hex,
+    'title': 'Fairy Tail', 
+    'tags': ['shounen', 'comedy'], 
+    'finished': True}]
 
 #get and post
-
-
 @app.route('/anime', methods=["GET", "POST"])
 def anime_list():
     response_object = {'status': 'success'}
@@ -41,11 +42,13 @@ def anime_list():
         response_object['anime'] = ANIME
     return jsonify(response_object)
 
+
+
 #put and delete
-@app.route('/anime/<anime_id>', methods=["PUT"])
+@app.route('/anime/<anime_id>', methods=["PUT","DELETE"])
 def ani(anime_id):
     response_object = {'status': 'success'}
-    if resquest.method == "PUT":
+    if request.method == "PUT":
         post_data = request.get_json()
         ANIME.append({
             'id': uuid.uuid4().hex(),
@@ -54,6 +57,9 @@ def ani(anime_id):
             'finished': post_data.get('finished'),
         })
         response_object['message'] = 'Anime updated'
+    if request.method == "DELETE":
+        remove_anime(anime_id)
+        response_object['message'] = 'Anime removed'
     return jsonify(response_object)
 
 
