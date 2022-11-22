@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <div class="btn-group" role="group">
-                          <button type="button" class="btn btn-info btn-sm">Update</button>
+                          <button type="button" class="btn btn-info btn-sm" v-b-modal.anime-update-modal @click="updateAni(ani)">Update</button>
                           <button type="button" class="btn btn-danger btn-sm">Delete</button>
                         </div>
 
@@ -49,7 +49,7 @@
         </div>
       </div>
 
-      <!--first modal-->
+      <!--add game modal-->
       <b-modal ref="addAnimeModal" id="anime-modal" title="Add new anime" hide-backdrop hide-footer>
         <b-form @submit="onSubmit" @reset="onReset" class="w-100">
           <b-form-group id="form-title-group" label="Title:" label-for="form-title-input">
@@ -73,6 +73,36 @@
         <b-button type="reset" variant="primary">Reset</b-button>
         </b-form>
       </b-modal>
+
+      <!--update modal-->
+      <b-modal ref="updateAnimeModal" id="anime-update-modal" title="Update anime" hide-backdrop hide-footer>
+        <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
+          <b-form-group id="form-title-update-group" label="Title:" label-for="form-title-update-input">
+            <b-form-input id="form-title-update-input" type="text" v-model="updateAnimeForm.title" required placeholder="Enter Anime">
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group id="form-tags-update-group" label="Tags:" label-for="form-tags-update-input">
+            <b-form-input id="form-tags-update-input" type="text" v-model="updateAnimeForm.tags" required placeholder="Enter Tags">
+            </b-form-input>
+          </b-form-group>
+
+        <b-form-group id="form-finished-update-group">
+          <b-form-checkbox-group id="form-check" v-model="updateAnimeform.finished">
+            <b-form-checkbox value="true">Finished?</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+
+        <!--buttons-->
+        <b-button-group>
+          <b-button type="submit" variant="outline-info">Update</b-button>
+          <b-button type="reset" variant="outline-danger">Cancel</b-button>
+        </b-button-group>
+        
+        </b-form>
+      </b-modal>
+
+
     </div>
   </div>
 </template>
@@ -84,6 +114,13 @@ export default {
     return {
       anime:[],
       addAnimeForm: {
+        title: "",
+        tags:[],
+        finished: [],
+      },
+
+      updateAnimeForm: {
+        id: "",
         title: "",
         tags:[],
         finished: [],
@@ -105,9 +142,9 @@ export default {
       });
     },
 
-    addAnime(payLoad){
+    addAnime(payload){
       const path = "http://localhost:5000/anime";
-      axios.get(path, payLoad)
+      axios.get(path, payload)
       .then((response)=>{
         this.getAnime();
         this.message = "Anime added";
@@ -123,9 +160,15 @@ export default {
       this.addAnimeForm.title = "";
       this.addAnimeForm.tags = [];
       this.addAnimeForm.finished = [];
+
+      this.updateAnimeForm.id = "";
+      this.updateAnimeForm.title = "";
+      this.updateAnimeForm.tags = [];
+      this.updateAnimeForm.finished = [];
+
     },
 
-    //submit function
+    //submit and edit function for post - modal 1
     onSubmit(e) {
       e.preventDefault();
       this.$refs.addAnimeModal.hide();
@@ -144,7 +187,46 @@ export default {
       e.preventDefault();
       this.$refs.addAnimeModal.hide();
       this.initForm();
-    }
+    },
+
+    //submit and edit function for update - modal 2
+    onSubmitUpdate(e) {
+      e.preventDefault();
+      this.$refs.updateAnimeModal.hide();
+      let finished = false;
+      if (this.updateAni.finished[0]) finished = true;
+      const payload = {
+        title: this.updateAnimeForm.title,
+        tags: this.updateAnimeForm.tags,
+        finished: this.updateAnimeForm.finished
+      };
+      this.updateAnime(payload, this.updateAni.id)
+    },
+
+    onResetUpdate(e) {
+      e.preventDefault();
+      this.$refs.updateAnimeModal.hide();
+      this.initForm();
+      this.getAnime();
+    },
+
+    updateAnime(payload, animeId) {
+      const path = `http://localhost:5000/anime/${animeId}`;
+      axios.get(path, payload)
+      .then(() => {
+        this.getAnime();
+        this.message = "Anime updated";
+        this.showMessage = true;
+      })
+      .catch((error) =>{
+        console.error(error);
+        this.getAnime();
+      });
+    },
+
+    updateAni(ani) {
+      this.updateAnimeForm = ani;
+    },
 
 
   },
